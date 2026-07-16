@@ -188,7 +188,7 @@ export default function CharterEditor({ initial }) {
                     className="btn ai"
                     onClick={generateAll}
                     disabled={genBusy}
-                    title="Generate objective, scope, tasks, owners and RACI from the goal + date"
+                    title="Generate objective, scope, tasks, owners and due dates from the goal + date"
                   >
                     {genBusy ? 'Generating…' : '✨ Generate charter from goal'}
                   </button>
@@ -224,9 +224,9 @@ export default function CharterEditor({ initial }) {
         {/* People */}
         <section className="panel" style={{ marginBottom: 20 }}>
           <div className="pad">
-            <h2 className="section-title">Team (for RACI assignment)</h2>
+            <h2 className="section-title">Team (for task owners)</h2>
             <p className="hint" style={{ marginTop: -6, marginBottom: 12 }}>
-              Add people here and they’ll autocomplete in the R / A / C / I columns below.
+              Add people here and they’ll autocomplete in the Responsible column below.
             </p>
             <div className="chips">
               {(charter.people || []).map((p) => (
@@ -253,7 +253,7 @@ export default function CharterEditor({ initial }) {
         {/* Tasks */}
         <div className="toolbar" style={{ marginBottom: 12 }}>
           <h2 className="section-title" style={{ margin: 0 }}>
-            Tasks &amp; RACI
+            Tasks
           </h2>
           <span className="spacer" />
           <button className="btn" onClick={addTask}>

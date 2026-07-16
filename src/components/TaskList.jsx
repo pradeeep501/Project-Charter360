@@ -14,26 +14,12 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { STATUSES, PRIORITIES, RACI } from '../lib/constants';
+import { STATUSES, PRIORITIES } from '../lib/constants';
 import AiButton from './AiButton';
 
 const PEOPLE_LIST_ID = 'people-datalist';
 
-function RaciCell({ field, task, onChange, onAi }) {
-  return (
-    <div className="cell small">
-      <input
-        list={PEOPLE_LIST_ID}
-        value={task[field] || ''}
-        placeholder="name / role"
-        onChange={(e) => onChange({ [field]: e.target.value })}
-      />
-      <AiButton label="" title={`Suggest ${field}`} onGenerate={() => onAi(field)} />
-    </div>
-  );
-}
-
-function SortableRow({ task, index, onChange, onDelete, onAi }) {
+function SortableRow({ task, onChange, onDelete, onAi }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: task.id });
 
@@ -69,10 +55,15 @@ function SortableRow({ task, index, onChange, onDelete, onAi }) {
         <AiButton label="" title="Draft description" onGenerate={() => onAi('description')} />
       </div>
 
-      <RaciCell field="responsible" task={task} onChange={onChange} onAi={onAi} />
-      <RaciCell field="accountable" task={task} onChange={onChange} onAi={onAi} />
-      <RaciCell field="consulted" task={task} onChange={onChange} onAi={onAi} />
-      <RaciCell field="informed" task={task} onChange={onChange} onAi={onAi} />
+      <div className="cell small">
+        <input
+          list={PEOPLE_LIST_ID}
+          value={task.responsible || ''}
+          placeholder="name / role"
+          onChange={(e) => onChange({ responsible: e.target.value })}
+        />
+        <AiButton label="" title="Suggest owner" onGenerate={() => onAi('responsible')} />
+      </div>
 
       <div className="cell small">
         <input
@@ -90,14 +81,13 @@ function SortableRow({ task, index, onChange, onDelete, onAi }) {
             </option>
           ))}
         </select>
-        <select
-          style={{ marginTop: 6 }}
-          value={task.priority}
-          onChange={(e) => onChange({ priority: e.target.value })}
-        >
+      </div>
+
+      <div className="cell">
+        <select value={task.priority} onChange={(e) => onChange({ priority: e.target.value })}>
           {PRIORITIES.map((p) => (
             <option key={p.value} value={p.value}>
-              {p.label} priority
+              {p.label}
             </option>
           ))}
         </select>
@@ -136,15 +126,10 @@ export default function TaskList({ tasks, people, onChange, onDelete, onReorder,
           <div />
           <div>Deliverable</div>
           <div>Description</div>
-          {RACI.map((r) => (
-            <div key={r.key} className="colhead">
-              <span>
-                <span className="raci-letter">{r.letter}</span> {r.label}
-              </span>
-            </div>
-          ))}
+          <div>Responsible</div>
           <div>Due</div>
-          <div>Status / Priority</div>
+          <div>Status</div>
+          <div>Priority</div>
           <div />
         </div>
 
@@ -157,11 +142,10 @@ export default function TaskList({ tasks, people, onChange, onDelete, onReorder,
             items={tasks.map((t) => t.id)}
             strategy={verticalListSortingStrategy}
           >
-            {tasks.map((task, index) => (
+            {tasks.map((task) => (
               <SortableRow
                 key={task.id}
                 task={task}
-                index={index}
                 onChange={(patch) => onChange(task.id, patch)}
                 onDelete={onDelete}
                 onAi={(field) => onAi(task.id, field)}

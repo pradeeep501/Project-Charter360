@@ -10,10 +10,7 @@ const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-4-8';
 const TASK_PROPS = {
   deliverable: { type: 'string', description: 'Short name of the task/deliverable' },
   description: { type: 'string', description: 'One or two sentences on what this involves' },
-  responsible: { type: 'string', description: 'Role or name responsible for doing the work (R)' },
-  accountable: { type: 'string', description: 'Single role or name accountable for the outcome (A)' },
-  consulted: { type: 'string', description: 'Roles/names consulted (C), comma-separated' },
-  informed: { type: 'string', description: 'Roles/names kept informed (I), comma-separated' },
+  responsible: { type: 'string', description: 'Role or name responsible for doing the work' },
   dueDate: { type: 'string', description: 'Due date as YYYY-MM-DD, on or before the target date' },
   status: { type: 'string', enum: ['not_started', 'in_progress', 'blocked', 'done'] },
   priority: { type: 'string', enum: ['low', 'medium', 'high'] },
@@ -50,7 +47,7 @@ const FIELD_SCHEMA = {
 
 function fullPrompt(body) {
   const people = (body.people || []).map((p) => p.name).filter(Boolean);
-  return `You are a project management expert. Build a RACI-style project charter.
+  return `You are a project management expert. Build a project charter.
 
 Goal: ${body.goal || '(not provided)'}
 Target date: ${body.targetDate || '(not provided)'}
@@ -59,7 +56,7 @@ Team members available: ${people.length ? people.join(', ') : '(none listed — 
 Produce:
 - objective, scope, successCriteria
 - a realistic, ordered list of 6-10 tasks that get from today to the target date
-- for each task assign RACI. Accountable must be exactly one person/role. Prefer the listed team members; if none listed, use role titles.
+- for each task set a single "responsible" owner (the person/role doing the work). Prefer the listed team members; if none listed, use role titles.
 - stagger dueDate values sensibly leading up to the target date (YYYY-MM-DD). Never set a date after the target date.
 - set status to "not_started" and choose a sensible priority.`;
 }
@@ -112,9 +109,6 @@ function mockFull(body) {
       deliverable,
       description,
       responsible: pick(i),
-      accountable: pick(0),
-      consulted: owners[1] ? owners[1] : 'Stakeholders',
-      informed: 'Wider team',
       dueDate: fmt(due),
       status: 'not_started',
       priority: i <= 1 ? 'high' : 'medium',

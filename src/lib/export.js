@@ -14,10 +14,7 @@ function esc(s) {
 const COLS = [
   ['deliverable', 'Deliverable'],
   ['description', 'Description'],
-  ['responsible', 'Responsible (R)'],
-  ['accountable', 'Accountable (A)'],
-  ['consulted', 'Consulted (C)'],
-  ['informed', 'Informed (I)'],
+  ['responsible', 'Responsible'],
   ['dueDate', 'Due'],
   ['status', 'Status'],
   ['priority', 'Priority'],
@@ -88,14 +85,9 @@ function charterToPlainText(charter) {
     lines.push(`${i + 1}. ${t.deliverable || '(untitled)'}`);
     if (t.description) lines.push(`   ${t.description}`);
     lines.push(
-      `   R: ${t.responsible || '-'} | A: ${t.accountable || '-'} | C: ${
-        t.consulted || '-'
-      } | I: ${t.informed || '-'}`,
-    );
-    lines.push(
-      `   Due: ${t.dueDate || '-'} | Status: ${statusLabel(t.status)} | Priority: ${priorityLabel(
-        t.priority,
-      )}`,
+      `   Responsible: ${t.responsible || '-'} | Due: ${t.dueDate || '-'} | Status: ${statusLabel(
+        t.status,
+      )} | Priority: ${priorityLabel(t.priority)}`,
     );
   });
   return lines.join('\n');

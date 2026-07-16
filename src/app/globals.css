@@ -295,11 +295,11 @@ label.field {
   background: #fff;
 }
 .task-grid {
-  min-width: 1180px;
+  min-width: 980px;
 }
 .task-row {
   display: grid;
-  grid-template-columns: 34px 1.4fr 2fr 1fr 1fr 1fr 1fr 120px 130px 34px;
+  grid-template-columns: 34px 1.4fr 2fr 1.2fr 140px 130px 120px 34px;
   gap: 8px;
   align-items: start;
   padding: 10px 12px;
