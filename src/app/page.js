@@ -61,7 +61,7 @@ export default function Home() {
             <h2 className="section-title">Start a new charter</h2>
             <p className="hint" style={{ marginTop: -6, marginBottom: 14 }}>
               Give it a goal and a target date. On the next screen you can auto-generate the
-              whole task list, owners, and RACI with AI.
+              whole task list, owners, and due dates with AI.
             </p>
             <form onSubmit={createCharter}>
               <div className="grid2">
